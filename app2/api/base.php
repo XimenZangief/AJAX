@@ -5,7 +5,7 @@ session_start();
 class DB{
     protected $dsn="mysql:host=localhost;charset=utf8;dbname=ajax";
     protected $user="root";
-    protected $pw='';
+    protected $pw="";
     protected $pdo;
     protected $table;
 
