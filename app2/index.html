@@ -14,11 +14,7 @@
       crossorigin="anonymous"
     />
     <!---匯入要使用的函式庫--->
-    <script
-      src="https://code.jquery.com/jquery-3.6.0.min.js"
-      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-      crossorigin="anonymous"
-    ></script>
+    <script src="../jquery-3.6.0.min.js"></script>
   </head>
 
   <body>
@@ -93,7 +89,9 @@
       $("#nav")
         .prepend(`<input type='text' name='query' id='query' placeholder='輸入學生姓名'>
                          <button onclick='query()'>查詢</button>`);
-      $("#nav").prepend(`<button class='btn btn-success' onclick='create()'>新增學生</button>`);
+      $("#nav").prepend(
+        `<button class='btn btn-success' onclick='create()'>新增學生</button>`
+      );
     });
   }
 
@@ -126,7 +124,7 @@
                 <td>${stu.birthday}</td>
                 <td>${stu.national_id}</td>
                 <td>
-                  <button class='btn btn-primary' onclick='update(${stu.id})'>編輯</button>
+                  <button class='btn btn-primary' onclick='update_show(${stu.id})'>編輯</button>
                   <button class='btn btn-danger' onclick='del(${stu.id})'>刪除</button>
                 </td>
               </tr>
@@ -137,49 +135,70 @@
 
   //新增資料的函式
   function create() {
-    $("#modal").load("api/show_form.php",()=>{
-      $("#stuForm").fadeIn();
-    })
+    $("#modal").load("api/show_form.php", () => {
+      $("#stuForm").modal("show");
+    });
   }
-  
+
   // 關閉modal的函式
-  function esc(){
-    $("#stuForm").hide();
+  function esc() {
+    $("#stuForm").modal("hide");
+    $("#updateForm").modal("hide");
   }
 
   //表單資料存成物件並傳值給insert且隱藏modal的函式
-  function add(){
-    let stu={
-      name:$("#name").val(),
-      classroom:$("#classroom").val(),
-      birthday:$("#birthday").val(),
-      seat_num:$("#seat_num").val()
-    }
+  function add() {
+    let stu = {
+      name: $("#name").val(),
+      classroom: $("#classroom").val(),
+      birthday: $("#birthday").val(),
+      seat_num: $("#seat_num").val(),
+    };
 
-    $.post("api/insert.php",stu,(res)=>{
+    $.post("api/insert.php", stu, (res) => {
       // console.log(res);
-      $("#stuForm").hide();
+      $("#stuForm").modal("hide");
       loadStudents($("#classroom").val());
-    })
+    });
   }
-
 
   //查詢資料的函式
   function query() {
     // console.log($("#query").val());
-    let q=$("#query").val();
+    let q = $("#query").val();
     $.get("api/query.php", { q }, (items) => {
       showData(items);
     });
   }
 
-  //編輯資料的函式
-  function update() {}
+  // 顯示編輯資料的modal
+  function update_show(id) {
+    $.get("api/update_form.php", { id }, (modal) => {
+      $("#modal").html(modal);
+      $("#updateForm").modal("show");
+    })
+  }
+
+  // 編輯資料的函式
+  function update(id) {
+    let stu = {
+      id: id,
+      name: $("#name").val(),
+      classroom: $("#classroom").val(),
+      birthday: $("#birthday").val(),
+      seat_num: $("#seat_num").val(),
+    }
+    $.post("api/update.php", stu, (res) => {
+      // console.log(res);
+      $("#updateForm").modal("hide");
+      loadStudents($("#classroom").val())
+    })
+  }
 
   //刪除資料的函式
   function del(id) {
-    $.post("api/delete.php",{id},(classnum)=>{
+    $.post("api/delete.php", { id }, (classnum) => {
       loadStudents(classnum);
-    })
+    });
   }
 </script>
