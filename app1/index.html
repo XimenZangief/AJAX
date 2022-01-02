@@ -48,7 +48,7 @@ loadpage('results/main.html');
 //JQuery語法，必須事先載入JQuery語法
 function loadpage(page){
   // page='result/health.html';
-  $.get(page,function(res){
+  $.get(page,(res)=>{
     $(".content").html(res)
   })
 }

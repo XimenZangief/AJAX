@@ -31,25 +31,25 @@
   ********************************************************/
 
   //利用$.ajax()方法傳送請求並取得回應
-  // $.ajax(
-  //   {
-  //     url: 'https://kktix.com/events.json',
-  //     type: 'get',
-  //     success: (data) => {
-  //       $(".title").html(data.title)
-  //       let list = "";
-  //       data.entry.forEach(function (e, i) {
-  //         //console.log(e.title)
-  //         list = list + `<li>
-  //                       <div>${e.title}</div>
-  //                       <div>${e.summary}</div>
-  //                       <div>${e.content}</div>
-  //                       </li>`;
-  //       });
-  //       $("#list").html(list);
-  //     }
-  //   }
-  // )
+  $.ajax(
+    {
+      url: 'https://kktix.com/events.json',
+      type: 'get',
+      success: (data) => {
+        $(".title").html(data.title)
+        let list = "";
+        data.entry.forEach(function (e, i) {
+          //console.log(e.title)
+          list = list + `<li>
+                        <div>${e.title}</div>
+                        <div>${e.summary}</div>
+                        <div>${e.content}</div>
+                        </li>`;
+        });
+        $("#list").html(list);
+      }
+    }
+  )
 
   //利用$.get()方法傳送請求並取得回應
   $.get('https://kktix.com/events.json', (data) => {
