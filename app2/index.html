@@ -28,7 +28,7 @@
       <nav id="nav" class="d-flex justify-content-between"></nav>
       <table id="students" class="table"></table>
     </div>
-
+    <div id="modal"></div>
     <script
       src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
       integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
@@ -93,6 +93,7 @@
       $("#nav")
         .prepend(`<input type='text' name='query' id='query' placeholder='輸入學生姓名'>
                          <button onclick='query()'>查詢</button>`);
+      $("#nav").prepend(`<button class='btn btn-success' onclick='create()'>新增學生</button>`);
     });
   }
 
@@ -135,7 +136,33 @@
   }
 
   //新增資料的函式
-  function create() {}
+  function create() {
+    $("#modal").load("api/show_form.php",()=>{
+      $("#stuForm").fadeIn();
+    })
+  }
+  
+  // 關閉modal的函式
+  function esc(){
+    $("#stuForm").hide();
+  }
+
+  //表單資料存成物件並傳值給insert且隱藏modal的函式
+  function add(){
+    let stu={
+      name:$("#name").val(),
+      classroom:$("#classroom").val(),
+      birthday:$("#birthday").val(),
+      seat_num:$("#seat_num").val()
+    }
+
+    $.post("api/insert.php",stu,(res)=>{
+      // console.log(res);
+      $("#stuForm").hide();
+      loadStudents($("#classroom").val());
+    })
+  }
+
 
   //查詢資料的函式
   function query() {
